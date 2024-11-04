@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import logo from "../assets/logo.png";
+import axios from 'axios'
 import googleLogo from "../assets/google.png";
+import {useNavigate } from 'react-router-dom';
+import {useSelector,useDispatch} from "react-redux";
+import {setToken,setLoading,setRole} from "../slices/authSlice"
+import {toast} from "react-hot-toast"
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -10,6 +15,10 @@ const SignUp = () => {
     password: '',
   });
   
+  const dispatch=useDispatch();
+  const navigate = useNavigate();
+  const loading =useSelector((state)=>(state.auth.loading))
+
   const [errors, setErrors] = useState({
     email: '',
     password: '',
@@ -51,16 +60,38 @@ const SignUp = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    dispatch(setLoading(true))
     // Perform submission logic here
+    axios.post('/api/signUpMentee', {
+      role:'mentee',
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      password: formData.password,
+    })
+    .then(response => {
+      toast.success("Siggned in successfuly")
+      dispatch(setToken(response.data.token));
+      dispatch(setRole("mentee"));
+      navigate("/profile")
+      console.log(response.data);
+    })
+    .catch(error => {
+      // Handle login error
+      toast.error("something went wrong ,Plz try again")
+      console.error(error);
+    })
+      dispatch(setLoading(false))
   };
 
   return (
     <div className="flex h-screen">
       {/* Left Side - Blue section */}
       <div className="w-2/5 bg-black flex justify-center items-center">
+      <a href='/'>
         <img src={logo} alt="Logo" className="h-32" />
+      </a>
       </div>
-
       {/* Right Side - SignUp form */}
       <div className="w-1/2 flex justify-center items-center">
         <div className="w-96 p-8">
@@ -147,10 +178,10 @@ const SignUp = () => {
           </button>
 
           <p className="mt-4 text-center">
-            Already have an account? <a href="#" className="text-teal-600 underline">Log in</a>
+            Already have an account? <a href="/login" className="text-teal-600 underline">Log in</a>
           </p>
           <p className="mt-2 text-center">
-            Looking to join us as a mentor? <a href="#" className="text-teal-600 underline">Apply now</a>
+            Looking to join us as a mentor? <a href="/signUpMentor" className="text-teal-600 underline">Apply now</a>
           </p>
         </div>
       </div>
