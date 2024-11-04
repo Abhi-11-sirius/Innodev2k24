@@ -1,6 +1,6 @@
 import ResponsiveAppBar from '../components/NavbarLandingPage';
 import Body from '../components/Body'
-import Footer from '../components/footer'
+import Footer from '../components/Footer'
 import MentorSection from '../components/Mentordetail';
 const LandingPage = () =>{
 return (

@@ -10,6 +10,13 @@ import ResetPassword from './pages/ResetPassword'
 import Dashboard from './pages/Dashboard';
 // import PrivateRoute from './components/PrivateRoute'
 import ChangePasswordConfirm from './components/ChangePasswordConfirm'
+import './App.css'
+import Dashboard from "./pages/Dashboard"
+import LandingPage from './pages/LandingPage'
+import ResetPassword from "./pages/ResetPassword"
+import SignUp from "./pages/SignUp"
+import Login from './pages/Login'
+
 function App() {
   const [count, setCount] = useState(0)
 

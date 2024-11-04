@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Avatar, Chip, Card, CardContent, Typography, IconButton, Button, Tooltip } from '@mui/material';
 import { LocationOn, Star, CheckCircle, AccessTime, Phone, Group } from '@mui/icons-material';
 import Navbar from "../components/Navbar"
-import Footer from "../components/footer"
+import Footer from "../components/Footer"
 import Testimonial from './Testimonial';
 
 const Dashboard = () => {
