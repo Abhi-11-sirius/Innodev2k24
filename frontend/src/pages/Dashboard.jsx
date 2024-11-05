@@ -150,11 +150,13 @@ const Dashboard = () => {
             About
           </h2>
           <p className="text-justify text-gray-700 text-xl">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquam ratione nostrum voluptate cumque. Quisquam, neque ducimus rem soluta blanditiis incidunt hic voluptas perspiciatis dolore! Et autem quam soluta illo eaque?
+            {/* Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquam ratione nostrum voluptate cumque. Quisquam, neque ducimus rem soluta blanditiis incidunt hic voluptas perspiciatis dolore! Et autem quam soluta illo eaque?
             Sunt assumenda odit molestiae modi perferendis qui excepturi iste, nihil perspiciatis! Excepturi quis accusamus, similique totam unde hic culpa. Quisquam, ducimus hic temporibus nulla corrupti aliquid laudantium. Quam, dolorum eius.
             Itaque debitis non cupiditate quaerat eos quo consequatur. Odio ad vitae suscipit. Consequatur itaque sunt dolorum impedit mollitia nostrum inventore repellendus, cumque ut praesentium voluptate tempore, delectus, alias possimus tenetur.
             Repellendus voluptatem sed aut at iure eligendi, placeat provident fugit reiciendis aperiam doloremque tenetur nisi vel voluptatum vero culpa magnam, hic doloribus corrupti perspiciatis expedita exercitationem! Voluptas error consectetur iure.
-            Magni ipsa quod ducimus esse sit fuga modi incidunt culpa consequuntur. Iusto, totam repudiandae repellat a vitae, reprehenderit officia sapiente nesciunt dolorum dolore itaque esse eum? Veniam sequi a quisquam.
+            Magni ipsa quod ducimus esse sit fuga modi incidunt culpa consequuntur. Iusto, totam repudiandae repellat a vitae, reprehenderit officia sapiente nesciunt dolorum dolore itaque esse eum? Veniam sequi a quisquam. */
+            }
+            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quo inventore at aliquid, magni quibusdam deserunt optio reiciendis voluptatem voluptate asperiores animi molestias? Unde, impedit quis minima sed distinctio aut obcaecati.
           </p>
         </div>
       </div>
