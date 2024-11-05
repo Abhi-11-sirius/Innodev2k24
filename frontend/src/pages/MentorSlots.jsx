@@ -57,11 +57,11 @@ const MentorSlots = () => {
   };
 
   useEffect(() => {
-    // if (!token || role !== "mentee") {
-    //   toast.error("Please log in as a mentee to book a session");
-    //   navigate("/login");
-    //   return;
-    // }
+    if (!token || role !== "mentee") {
+      toast.error("Please log in as a mentee to book a session");
+      navigate("/login");
+      return;
+    }
     fetchSlots();
   }, [id, token, role, navigate]);
 
@@ -125,9 +125,9 @@ const MentorSlots = () => {
 
   return (
     <>
-      {/* {loading ? (
+      {loading ? (
         <CustomSpinner />
-      ) : ( */}
+      ) : (
         <div className="p-4 bg-gray-100 text-gray-900">
           <h2 className="text-2xl font-bold mb-4">Available Slots</h2>
 
