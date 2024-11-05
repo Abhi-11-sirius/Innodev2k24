@@ -110,27 +110,27 @@ const UpdateMentorSlots = () => {
     dispatch(setLoading(false));
   };
 
-//   const handleDeleteSlot = async (slotId) => {
-//     dispatch(setLoading(true));
-//     try {
-//       const response = await axios.delete(
-//         `http://localhost:3000/mentors/${id}/free-slots/${slotId}`,
-//         {
-//           headers: { Authorization: `Bearer ${token}` },
-//         }
-//       );
+  const handleDeleteSlot = async (slotId) => {
+    dispatch(setLoading(true));
+    try {
+      const response = await axios.delete(
+        `http://localhost:3000/mentors/${id}/free-slots/${slotId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
-//       if (response.data.success) {
-//         toast.success("Slot deleted successfully");
-//         fetchSlots(); // Refresh the slots list after deletion
-//       } else {
-//         toast.error("Failed to delete slot");
-//       }
-//     } catch (error) {
-//       toast.error(error.response?.data?.message || "Failed to delete slot");
-//     }
-//     dispatch(setLoading(false));
-//   };
+      if (response.data.success) {
+        toast.success("Slot deleted successfully");
+        fetchSlots(); // Refresh the slots list after deletion
+      } else {
+        toast.error("Failed to delete slot");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to delete slot");
+    }
+    dispatch(setLoading(false));
+  };
 
   // Pagination logic
   const indexOfLastSlot = currentPage * slotsPerPage;
