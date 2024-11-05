@@ -8,14 +8,10 @@ import SignUpMentor from './pages/signUpMentor'
 import Login from './pages/Login'
 import ResetPassword from './pages/ResetPassword'
 import Dashboard from './pages/Dashboard';
-// import PrivateRoute from './components/PrivateRoute'
 import ChangePasswordConfirm from './components/ChangePasswordConfirm'
+import ContactUs from './pages/ContactUs';
+import MentorSearchPage from './pages/MentorSeachPage';
 import './App.css'
-import Dashboard from "./pages/Dashboard"
-import LandingPage from './pages/LandingPage'
-import ResetPassword from "./pages/ResetPassword"
-import SignUp from "./pages/SignUp"
-import Login from './pages/Login'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -29,6 +25,8 @@ function App() {
           <Route path='/profile' element={<Dashboard/>}/>
           <Route path='/resetPassword' element={<ResetPassword/>}/>
           <Route path='/reset-password/:token' element={<ChangePasswordConfirm />} />
+          <Route path='/contact' element={<ContactUs/>}/>
+          <Route path ='/mentorSearch' element={<MentorSearchPage/>}/>
       </Routes>
     // <MentorSignup/>
   )

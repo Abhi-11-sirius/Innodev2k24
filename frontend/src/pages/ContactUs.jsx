@@ -1,8 +1,9 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import { Button, Input, Textarea, Typography } from "@material-tailwind/react";
 import Navbar from "../components/NavbarLandingPage"
 import Footer from "../components/footer"
-import Image from "../assets/ContactUs.avif"
+import Image from "../assets/logo.png"
 
 export function ContactUs() {
   return (
