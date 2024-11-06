@@ -1,229 +1,112 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Button,
-  TextField,
-  Modal,
-  Pagination,
-} from "@mui/material";
-import { useParams, useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
-import "../stylesheets/MentorSlots.css";
-import { useDispatch, useSelector } from "react-redux";
-import { setLoading } from "../slices/authSlice";
-import { CustomSpinner } from "../components/CustomSpinner";
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect } from 'react';
+import Navbar from '../components/NavbarLandingPage';
+import { useSelector, useDispatch } from 'react-redux';
+import CustomSpinner from "../components/CustomSpinner";
+import { setLoading } from "../slices/authSlice"; 
+import axios from 'axios';
 
-const MentorSlots = () => {
-  const loading = useSelector((state) => state.auth.loading);
+const Profile = () => {
+  const [menteeData, setMenteeData] = useState(null); // State for mentee data
+  const [error, setError] = useState(null); // State for error handling
+  const role = useSelector((state) => state.auth.role); // Get role from Redux
+  const menteeId = useSelector((state) => state.mentee.data._id); // Mentee ID from Redux
+  const loading = useSelector((state) => state.auth.loading); // Get loading status
   const dispatch = useDispatch();
-  const { id } = useParams();
-  const [slots, setSlots] = useState([]);
-  const [searchDate, setSearchDate] = useState("");
-  const [searchTime, setSearchTime] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [slotsPerPage] = useState(10);
-  const [bookingModalOpen, setBookingModalOpen] = useState(false);
-  const [selectedSlot, setSelectedSlot] = useState(null);
-  const [error, setError] = useState("");
-  const navigate = useNavigate();
+  console.log(menteeId);
 
-    const token = useSelector((state) => state.auth.token);
-    const role = useSelector((state) => state.auth.role);
-    const [toastShown, setToastShown] = useState(false); // To avoid duplicate toasts
-
-  const fetchSlots = async () => {
-    dispatch(setLoading(true));
-    try {
-      const response = await axios.get(
-        `http://localhost:3000/mentors/${id}/normalfree-slots`
-      );
-      if (response.data.success) {
-        setSlots(response.data.data);
-      } else {
-        throw new Error("Failed to fetch slots");
+  useEffect(() => {
+    
+    const fetchMenteeData = async () => {
+      if (role === 'mentee') {
+        dispatch(setLoading(true));
+        try {
+          const response = await axios.get(`http://localhost:3000/mentee/${menteeId}`);
+          console.log(response.data);
+          setMenteeData(response.data.mentee); // Set the mentee data
+        } catch (error) {
+          console.error("Error fetching mentee details:", error);
+          setError("Error fetching mentee details");
+        } finally {
+          dispatch(setLoading(false));
+        }
       }
-    } catch (err) {
-      setError("Failed to fetch slots");
-      toast.error("Failed Fetching FreeSlots");
-    }
-    dispatch(setLoading(false));
-  };
+    };
 
-  useEffect(() => {
-    if (!token || role !== "mentee") {
-      toast.error("Please log in as a mentee to book a session");
-      navigate("/login");
-      return;
-    }
-    fetchSlots();
-  }, [id, token, role, navigate]);
+    fetchMenteeData();
+  }, [role, menteeId, dispatch]);
 
-  const filteredSlots = slots.filter(
-    (slot) =>
-      (!searchDate || slot.date.includes(searchDate)) &&
-      (!searchTime || slot.time.includes(searchTime))
-  );
+  // Display error or loading states
+  if (error) {
+    return <div>{error}</div>;
+  }
 
-  const indexOfLastSlot = currentPage * slotsPerPage;
-  const indexOfFirstSlot = indexOfLastSlot - slotsPerPage;
-  const currentSlots = filteredSlots.slice(indexOfFirstSlot, indexOfLastSlot);
+  if (loading) {
+    return <CustomSpinner />; // Use CustomSpinner to indicate loading state
+  }
 
-  const handlePageChange = (event, value) => setCurrentPage(value);
-
-  const handleBookSlot = (slot) => {
-    setSelectedSlot(slot);
-    setBookingModalOpen(true);
-  };
-
-  const handleCloseBookingModal = () => setBookingModalOpen(false);
-
-  const handleConfirmBooking = async () => {
-    dispatch(setLoading(true));
-    try {
-      await axios.post(
-        `http://localhost:3000/sessions/${id}/book`,
-        {
-          date: selectedSlot.date,
-          time: selectedSlot.time,
-          session_type: "one-on-one",
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setBookingModalOpen(false);
-      toast.success("Session Booked Successfully");
-      // Fetch updated slots after booking
-      fetchSlots();
-    } catch (error) {
-      toast.error("Booking Failed: Server Error");
-      setError("Failed to book the slot. Please try again.");
-    }
-    dispatch(setLoading(false));
-  };
-
-  useEffect(() => {
-    if (!token || role !== 'mentee') {
-        if (!toastShown) {
-            toast.error('Please log in as a mentee to book a session');
-            setToastShown(true);
-        }
-        navigate('/login');
-        return;
-    }
-    fetchSlots();
-}, [id, token, role, navigate, toastShown]);
+  if (role !== 'mentee') {
+    return <div>Access Denied. Only mentees can view this page.</div>;
+  }
 
   return (
     <>
-      {loading ? (
-        <CustomSpinner />
-      ) : (
-        <div className="p-4 bg-gray-100 text-gray-900">
-          <h2 className="text-2xl font-bold mb-4">Available Slots</h2>
-
-          {error && <p className="text-red-500">{error}</p>}
-
-          {/* Search Bar */}
-          <div className="flex gap-6 mb-4">
-            <TextField
-              label="Search by Date"
-              type="date"
-              variant="outlined"
-              InputLabelProps={{ shrink: true }}
-              margin="dense"
-              onChange={(e) => setSearchDate(e.target.value)}
-              style={{ width: "200px" }} // Increase width
+      <Navbar />
+      <div className="bg-gray-50 rounded-lg shadow-2xl max-w-screen min-h-screen w-full overflow-hidden">
+        {/* Profile Header */}
+        <div className="w-full p-6 rounded-lg shadow-inner">
+          {/* Profile Picture and Info */}
+          <div className="flex items-center bg-gray-100 p-6 rounded-lg shadow-lg ">
+            <img
+              className="w-24 h-24 rounded-full border-4 border-white object-cover"
+              src={menteeData?.profilePic || 'https://via.placeholder.com/150'}
+              alt="Profile"
+              style={{ marginTop: '-48px' }}
             />
-            <TextField
-              label="Search by Time"
-              type="time"
-              variant="outlined"
-              InputLabelProps={{ shrink: true }}
-              margin="dense"
-              onChange={(e) => setSearchTime(e.target.value)}
-              style={{ width: "200px" }} // Increase width
-            />
+            <div className="ml-4">
+              <h1 className="text-3xl font-bold text-gray-800">
+                {menteeData?.firstName} {menteeData?.lastName}
+              </h1>
+              <p className="text-lg text-gray-600">
+                {menteeData?.jobTitle || 'Job Title not available'}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Profile Body */}
+        <div className="flex flex-col md:flex-row gap-6 p-6">
+          {/* Left Sidebar - Basic Info and Contact */}
+          <div className="w-full md:w-1/3 bg-gray-100 p-4 rounded-lg shadow-inner">
+            <div className="mb-6">
+              <h2 className="text-lg font-semibold text-gray-800 mb-2">Contact Info</h2>
+              <p><strong>Email:</strong> {menteeData?.email || 'No email available'}</p>
+            </div>
+
+            {/* About Section */}
+            <div className="bg-gray-100 rounded-lg mb-6">
+              <h2 className="text-lg font-semibold text-gray-800 mb-4">About Me</h2>
+              <p className="text-gray-700">{menteeData?.bio || 'No bio available for this user.'}</p>
+            </div>
+
+            <div className="mb-6">
+              <h2 className="text-lg font-semibold text-gray-800 mb-2">Language</h2>
+              <p>{menteeData?.language || 'No language available'}</p>
+            </div>
+            <div className="mb-6">
+              <h2 className="text-lg font-semibold text-gray-800 mb-2">LinkedIn</h2>
+              <a href={menteeData?.linkedin} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+                Profile
+              </a>
+            </div>
           </div>
 
-          {/* Slots Table */}
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Date</TableCell>
-                  <TableCell>Time</TableCell>
-                  <TableCell>Action</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {currentSlots.map((slot, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{slot.date}</TableCell>
-                    <TableCell>{slot.time}</TableCell>
-                    <TableCell>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => handleBookSlot(slot)}
-                        style={{ marginLeft: "10px" }}
-                      >
-                        Book Now
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-
-          {/* Pagination */}
-          <Pagination
-            count={Math.ceil(filteredSlots.length / slotsPerPage)}
-            page={currentPage}
-            onChange={handlePageChange}
-            className="mt-4"
-          />
-
-          {/* Booking Modal */}
-          <Modal open={bookingModalOpen} onClose={handleCloseBookingModal}>
-            <div className="modal-content p-4">
-              <h3>Confirm Booking</h3>
-              <p>Date: {selectedSlot?.date}</p>
-              <p>Time: {selectedSlot?.time}</p>
-
-              {/* Button Container with Spacing */}
-              <div className="flex gap-4 mt-4">
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  onClick={handleConfirmBooking}
-                >
-                  Confirm
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  onClick={handleCloseBookingModal}
-                >
-                  Cancel
-                </Button>
-              </div>
-            </div>
-          </Modal>
+          {/* Right Section - Bio, Summary, and Sessions */}
+          {/* Additional components can go here */}
         </div>
-      )}
+      </div>
     </>
   );
 };
 
-export default MentorSlots;
+export default Profile;
