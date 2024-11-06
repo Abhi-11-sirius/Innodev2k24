@@ -1,16 +1,18 @@
 const mongoose = require('mongoose');
 
 const menteeSchema = new mongoose.Schema({
-  name: { type: String, required: true },
+  firstName: { type: String, required: true },
+  lastName: { type: String },
   email: { type: String, required: true, unique: true },
-  role: { type: String, enum: ['mentee'], required: true },  // role is fixed to 'mentee'
-  profile_details: { type: String, default: '' },
+  password:{type:String},
+  profilePicture: { type: String, default: '' },
   tags: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tag' }],  // tags referencing the Tag model
   jobTitle: { type: String },  // field for job title
   company: { type: String },   // field for company
   location: { type: String },  // field for location
   bio: { type: String },       // field for bio
   summary: { type: String },   // field for summary
+  skills: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tag' }],
   bookedSessions: [{
     sessionId: { type: mongoose.Schema.Types.ObjectId, ref: 'Session' },
     date: { type: Date },
@@ -24,5 +26,4 @@ const menteeSchema = new mongoose.Schema({
   }],  // posts made by the mentee
 });
 
-const Mentee = mongoose.model('Mentee', menteeSchema);
-module.exports= Mentee;
+module.exports = mongoose.models.Mentee || mongoose.model('Mentee', menteeSchema);
