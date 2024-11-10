@@ -17,6 +17,7 @@ import ChangePasswordConfirm from './components/ChangePasswordConfirm';
 import UpdateMentorSlots from './pages/UpdateMentorSlots';
 import UpcomingSessions from './pages/UpcomingSessions';
 import UserRegisteredSession from './pages/UserRegisteredSession';
+import Room from "./pages/Room"
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
       <Route path="/reset-password/:token" element={<ChangePasswordConfirm />} />
       <Route path="/searchPage" element={<MentorSearchPage />} />
       <Route path="/userRegisteredSession" element={<UserRegisteredSession />} />
+      <Route path='/video/join/:token' element={<Room />} />
 
       {/* Use Layout wrapper for routes with Navbar and Footer */}
       <Route element={<Layout />}>
