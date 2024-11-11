@@ -55,7 +55,7 @@ const RegisteredSessions = () => {
 
   const totalPages = Math.ceil((filteredSessions?.length || 0) / itemsPerPage);
 
-  const paginatedSessions = filteredSessions?.slice(
+  const paginatedSessions = filteredSessions?. (
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
